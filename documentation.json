@@ -534,7 +534,7 @@
         },
         {
             "name": "TaskListComponent",
-            "id": "component-TaskListComponent-927eda06beca2c171339183443ca2290a70d58658d56f264597f0deeb0f56fb80a9b02e660303753c1bf5b0610a51e5bac91a521359c9a185f694c5254c39c27",
+            "id": "component-TaskListComponent-355508b08e988551c163b6ef44f60c3013b16792b607b9678db766acb7065dc12e81cc9780014169505b5502b61403a1d150f81bd7d84f960f5ee34451c7005c",
             "file": "src/app/components/task-list.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -556,19 +556,16 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nChecks if it's in loading state",
                     "description": "<p>Checks if it&#39;s in loading state</p>\n",
-                    "line": 14,
+                    "line": 13,
                     "type": "boolean",
                     "decorators": []
                 },
                 {
                     "name": "tasks",
-                    "defaultValue": "[]",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "rawdescription": "\nThe list of tasks",
-                    "description": "<p>The list of tasks</p>\n",
-                    "line": 11,
-                    "type": "Task[]",
+                    "line": 26,
+                    "type": "[]",
                     "decorators": []
                 }
             ],
@@ -580,7 +577,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nEvent to change the task to archived",
                     "description": "<p>Event to change the task to archived</p>\n",
-                    "line": 24,
+                    "line": 23,
                     "type": "EventEmitter"
                 },
                 {
@@ -590,11 +587,22 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nEvent to change the task to pinned",
                     "description": "<p>Event to change the task to pinned</p>\n",
-                    "line": 19,
+                    "line": 18,
                     "type": "EventEmitter"
                 }
             ],
-            "propertiesClass": [],
+            "propertiesClass": [
+                {
+                    "name": "tasksInOrder",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Task[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
             "methodsClass": [],
             "deprecated": false,
             "deprecationMessage": "",
@@ -603,11 +611,43 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\nimport { Task } from '../models/task.model';\n\n@Component({\n  selector: 'app-task-list',\n  templateUrl: './task-list.component.html',\n})\nexport class TaskListComponent {\n  /** The list of tasks */\n  @Input() tasks: Task[] = [];\n\n  /** Checks if it's in loading state */\n  @Input() loading = false;\n\n  /** Event to change the task to pinned */\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onPinTask = new EventEmitter<Event>();\n\n  /** Event to change the task to archived */\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onArchiveTask = new EventEmitter<Event>();\n}",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\nimport { Task } from '../models/task.model';\n\n@Component({\n  selector: 'app-task-list',\n  templateUrl: './task-list.component.html',\n})\nexport class TaskListComponent {\n  tasksInOrder: Task[] = [];\n\n  /** Checks if it's in loading state */\n  @Input() loading = false;\n\n  /** Event to change the task to pinned */\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onPinTask = new EventEmitter<Event>();\n\n  /** Event to change the task to archived */\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onArchiveTask = new EventEmitter<Event>();\n\n  @Input()\n  set tasks(arr: Task[]) { //tasks value were provided by the task-list.stories.ts\n    this.tasksInOrder = [\n      ...arr.filter(t => t.state === 'TASK_PINNED'),\n      ...arr.filter(t => t.state !== 'TASK_PINNED'),\n    ];\n  }\n}",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
-            "templateData": "<div class=\"list-items\">\n    <div *ngIf=\"loading\">loading</div>\n    <div *ngIf=\"!loading && tasks.length === 0\">empty</div>\n    <app-task *ngFor=\"let task of tasks\" [task]=\"task\" (onArchiveTask)=\"onArchiveTask.emit($event)\"\n        (onPinTask)=\"onPinTask.emit($event)\">\n    </app-task>\n</div>"
+            "accessors": {
+                "tasks": {
+                    "name": "tasks",
+                    "setSignature": {
+                        "name": "tasks",
+                        "type": "void",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "args": [
+                            {
+                                "name": "arr",
+                                "type": "Task[]",
+                                "deprecated": false,
+                                "deprecationMessage": ""
+                            }
+                        ],
+                        "returnType": "void",
+                        "line": 26,
+                        "jsdoctags": [
+                            {
+                                "name": "arr",
+                                "type": "Task[]",
+                                "deprecated": false,
+                                "deprecationMessage": "",
+                                "tagName": {
+                                    "text": "param"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "templateData": "<div class=\"list-items\">\n    <app-task *ngFor=\"let task of tasksInOrder\" [task]=\"task\" (onArchiveTask)=\"onArchiveTask.emit($event)\"\n        (onPinTask)=\"onPinTask.emit($event)\">\n    </app-task>\n    <div *ngIf=\"tasksInOrder.length === 0 && !loading\" class=\"wrapper-message\">\n        <span class=\"icon-check\"></span>\n        <div class=\"title-message\">You have no tasks</div>\n        <div class=\"subtitle-message\">Sit back and relax</div>\n    </div>\n    <div *ngIf=\"loading\">\n        <div *ngFor=\"let i of [1, 2, 3, 4, 5, 6]\" class=\"loading-item\">\n            <span class=\"glow-checkbox\"></span>\n            <span class=\"glow-text\"> <span>Loading</span> <span>cool</span> <span>state</span> </span>\n        </div>\n    </div>\n</div>"
         }
     ],
     "modules": [
@@ -897,6 +937,16 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/stories/Button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story<Button>",
+                "defaultValue": "(args: Button) => ({\n  props: args,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/stories/Header.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -912,16 +962,6 @@
                 "deprecationMessage": "",
                 "type": "Story<Page>",
                 "defaultValue": "(args: Page) => ({\n  props: args,\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/stories/Button.stories.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "Story<Button>",
-                "defaultValue": "(args: Button) => ({\n  props: args,\n})"
             },
             {
                 "name": "Template",
@@ -1260,9 +1300,9 @@
                 "type": "component",
                 "linktype": "component",
                 "name": "TaskListComponent",
-                "coveragePercent": 80,
-                "coverageCount": "4/5",
-                "status": "very-good"
+                "coveragePercent": 50,
+                "coverageCount": "3/6",
+                "status": "medium"
             },
             {
                 "filePath": "src/app/components/task-list.stories.ts",

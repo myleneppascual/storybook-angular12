@@ -7,8 +7,7 @@ import { Task } from '../models/task.model';
   templateUrl: './task-list.component.html',
 })
 export class TaskListComponent {
-  /** The list of tasks */
-  @Input() tasks: Task[] = [];
+  tasksInOrder: Task[] = [];
 
   /** Checks if it's in loading state */
   @Input() loading = false;
@@ -22,4 +21,12 @@ export class TaskListComponent {
   // tslint:disable-next-line: no-output-on-prefix
   @Output()
   onArchiveTask = new EventEmitter<Event>();
+
+  @Input()
+  set tasks(arr: Task[]) { //tasks value were provided by the task-list.stories.ts
+    this.tasksInOrder = [
+      ...arr.filter(t => t.state === 'TASK_PINNED'),
+      ...arr.filter(t => t.state !== 'TASK_PINNED'),
+    ];
+  }
 }
