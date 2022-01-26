@@ -26,3 +26,8 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 https://storybook.js.org/blog/storybook-for-angular-12/
+
+### 
+My learnings:
+1. tried in other angular version, so far succeeded on angular 12 
+2. all the Input declared in the component, we give values in their corresponding .stories file. it is declared in each state's (or permutation), 'args'. so 'loading' and 'tasks' are declared as input in task-list.component.ts and values are filled in the task-list.stories.ts

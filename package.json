@@ -21,6 +21,9 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "@ngxs/devtools-plugin": "^3.7.3",
+    "@ngxs/logger-plugin": "^3.7.3",
+    "@ngxs/store": "^3.7.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -54,6 +57,6 @@
   "transform": {
     "^.+\\.(ts|html)$": "ts-jest",
     "^.+\\.js$": "babel-jest",
-     "^.+\\.stories\\.[jt]sx?$": "@storybook/addon-storyshots/injectFileName"
+    "^.+\\.stories\\.[jt]sx?$": "@storybook/addon-storyshots/injectFileName"
   }
 }
