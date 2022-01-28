@@ -31,3 +31,19 @@ https://storybook.js.org/blog/storybook-for-angular-12/
 My learnings:
 1. tried in other angular version, so far succeeded on angular 12 
 2. all the Input declared in the component, we give values in their corresponding .stories file. it is declared in each state's (or permutation), 'args'. so 'loading' and 'tasks' are declared as input in task-list.component.ts and values are filled in the task-list.stories.ts
+
+
+## NgXS
+Store 
+ -The store is a global state manager that dispatches actions your state containers listen to and provides a way to select data slices out from the global state.
+
+Actions
+- Actions can either be thought of as a command which should trigger something to happen, or as the resulting event of something that has already happened.
+Each action contains a type field which is its unique identifier.
+
+State
+-States are classes that define a state container.
+- To define a state container, let's create an ES2015 class and decorate it with the State decorator.
+
+Defining Actions
+- Our states listen to actions via an @Action decorator. The action decorator accepts an action class or an array of action classes.
